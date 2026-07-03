@@ -1,0 +1,23 @@
+/*--------------------------------*- C++ -*----------------------------*\
+| =========                 |                                                |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox         |
+|  \\    /   O peration     | Web:      www.openfoam.com                    |
+\*-----------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Optional: only needed if running in parallel, e.g.:
+//   decomposePar
+//   mpirun -np 4 pimpleFoam -parallel
+//   reconstructPar
+numberOfSubdomains 4;
+
+method          scotch;
+
+// ************************************************************************* //

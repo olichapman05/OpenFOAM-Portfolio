@@ -1,0 +1,57 @@
+/*--------------------------------*- C++ -*----------------------------*\
+| =========                 |                                                |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox         |
+|  \\    /   O peration     | Version:  v2412                               |
+|   \\  /    A nd           | Web:      www.openfoam.com                    |
+|    \\/     M anipulation  |                                                |
+\*-----------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Specific dissipation rate from k and an assumed turbulence length scale
+// l = 0.07*chord = 0.07 m:
+//   omega = sqrt(k) / (Cmu^0.25 * l) = sqrt(0.84375) / (0.09^0.25 * 0.07)
+//         ~= 27.56 1/s
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   uniform 27.56;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 27.56;
+    }
+
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform 27.56;
+        value           uniform 27.56;
+    }
+
+    airfoil
+    {
+        type            omegaWallFunction;
+        value           uniform 27.56;
+    }
+
+    front
+    {
+        type            empty;
+    }
+
+    back
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

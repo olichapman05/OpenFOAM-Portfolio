@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------*\
+| =========                 |                                                |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox         |
+|  \\    /   O peration     | Version:  v2412                               |
+|   \\  /    A nd           | Web:      www.openfoam.com                    |
+|    \\/     M anipulation  |                                                |
+\*-----------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     pimpleFoam;
+
+startFrom       startTime;
+startTime       0;
+
+stopAt          endTime;
+// Domain flow-through time ~ (chord + 2*outerRadius)/U ~ 41/15 ~ 2.7 s.
+// endTime = 3 flow-through times gives time for the wake/DES content to
+// develop and be sampled for a bit -- increase if longer statistics needed.
+endTime         8;
+
+deltaT          1e-4;
+
+writeControl    adjustableRunTime;
+writeInterval   0.05;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+writePrecision  7;
+writeCompression off;
+
+timeFormat      general;
+timePrecision   6;
+
+runTimeModifiable true;
+
+// DES is transient and sensitive to timestep -- adapt deltaT to keep the
+// Courant number bounded rather than fixing it by hand.
+adjustTimeStep  yes;
+maxCo           1.0;
+maxDeltaT       0.01;
+
+functions
+{
+    forceCoeffs1
+    {
+        type            forceCoeffs;
+        libs            (forces);
+        writeControl    timeStep;
+        writeInterval   1;
+
+        patches         (airfoil);
+        rho             rhoInf;
+        rhoInf          1;
+        liftDir         (-0.258819 0.965926 0); // perpendicular to freestream (15deg AoA)
+        dragDir         (0.965926 0.258819 0);  // aligned with freestream (15deg AoA)
+        CofR            (0.25 0 0.05);          // quarter-chord, mid-span
+        pitchAxis       (0 0 1);
+        magUInf         15;
+        lRef            1;    // chord
+        Aref            0.1;  // chord * spanwise thickness (1 * 0.1)
+    }
+
+    residuals1
+    {
+        type            solverInfo;
+        libs            (utilityFunctionObjects);
+        fields          (U p k omega);
+        writeControl    timeStep;
+        writeInterval   1;
+    }
+}
+
+// ************************************************************************* //

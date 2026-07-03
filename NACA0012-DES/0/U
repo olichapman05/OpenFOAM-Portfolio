@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------*\
+| =========                 |                                                |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox         |
+|  \\    /   O peration     | Version:  v2412                               |
+|   \\  /    A nd           | Web:      www.openfoam.com                    |
+|    \\/     M anipulation  |                                                |
+\*-----------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Freestream U = 15 m/s at 15 deg angle of attack.
+// The mesh/airfoil is built at 0 deg AoA; the AoA is imposed here instead:
+//   Ux = 15*cos(15deg) = 14.489476
+//   Uy = 15*sin(15deg) =  3.881679
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (14.489476 3.881679 0);
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform (14.489476 3.881679 0);
+    }
+
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform (0 0 0);
+        value           uniform (14.489476 3.881679 0);
+    }
+
+    airfoil
+    {
+        type            noSlip;
+    }
+
+    front
+    {
+        type            empty;
+    }
+
+    back
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

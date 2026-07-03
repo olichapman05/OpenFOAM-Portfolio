@@ -1,0 +1,41 @@
+/*--------------------------------*- C++ -*----------------------------*\
+| =========                 |                                                |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox         |
+|  \\    /   O peration     | Version:  v2412                               |
+|   \\  /    A nd           | Web:      www.openfoam.com                    |
+|    \\/     M anipulation  |                                                |
+\*-----------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      turbulenceProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// DES models live under the LES infrastructure in OpenFOAM.
+simulationType  LES;
+
+LES
+{
+    // kOmegaSSTDES: Menter/Kuntz k-omega SST Detached-Eddy Simulation model.
+    // Behaves as RANS (k-omega SST) near walls and switches to an LES-like
+    // subgrid model away from walls / in separated regions.
+    LESModel        kOmegaSSTDES;
+
+    turbulence      on;
+    printCoeffs     on;
+
+    // Wall functions are used (see 0/k, 0/omega, 0/nut), so delta is not
+    // critical to the near-wall RANS region, but is still required by the
+    // model for computing the DES length scale in the LES region.
+    delta           cubeRootVol;
+
+    cubeRootVolCoeffs
+    {
+        deltaCoeff      1;
+    }
+}
+
+// ************************************************************************* //

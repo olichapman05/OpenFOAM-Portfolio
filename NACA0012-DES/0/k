@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------*\
+| =========                 |                                                |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox         |
+|  \\    /   O peration     | Version:  v2412                               |
+|   \\  /    A nd           | Web:      www.openfoam.com                    |
+|    \\/     M anipulation  |                                                |
+\*-----------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Turbulent kinetic energy from an assumed 5% freestream turbulence
+// intensity: k = 1.5*(U*I)^2 = 1.5*(15*0.05)^2 = 0.84375 m^2/s^2
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0.84375;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 0.84375;
+    }
+
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform 0.84375;
+        value           uniform 0.84375;
+    }
+
+    airfoil
+    {
+        type            kqRWallFunction;
+        value           uniform 0.84375;
+    }
+
+    front
+    {
+        type            empty;
+    }
+
+    back
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //
