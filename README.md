@@ -61,13 +61,6 @@ time-stepping under a Courant constraint, a 2nd-order time scheme chosen
 specifically because DES demands it, and force-coefficient extraction on the
 aerofoil surface with correctly resolved lift/drag directions for 15° AoA.
 
-> **Honest note:** this mesh is a single cell thick with `empty` front/back
-> patches, i.e. it is run quasi-2D. Formally, DES is a three-dimensional method —
-> a strictly correct study would use a spanwise-extruded 3D mesh. Running it
-> quasi-2D here was a deliberate learning-stage / compute simplification to focus
-> on the solver setup and time-scheme behaviour; extending it to a true 3D
-> spanwise domain is a planned next step.
-
 📹 `NACA0012-VelocityDistribution.mp4` — velocity field showing wake shedding.
 
 ---
